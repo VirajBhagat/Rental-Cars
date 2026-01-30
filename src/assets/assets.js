@@ -1,4 +1,3 @@
-import gradientBackground from "./gradientBackground.png";
 import star_icon from "./star_icon.svg";
 import star_dull_icon from "./star_dull_icon.svg";
 import arrow_icon from "./arrow_icon.svg";
@@ -7,7 +6,6 @@ import logo from "./logo.png";
 
 export const assets = {
     logo,
-    gradientBackground,
     star_icon,
     star_dull_icon,
     arrow_icon,
