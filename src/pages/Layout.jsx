@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import { SignIn, useUser } from "@clerk/clerk-react";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { dataContext } from "../context/UserContext";
+import { useSelector } from "react-redux";
 
 const Layout = () => {
+  let items = useSelector(state => state);
+  let {input, setInput, category, setCategory, showCart, setShowCart} = useContext(dataContext);
+  
   const navigate = useNavigate();
   const [sidebar, setSidebar] = useState(false);
   const { user } = useUser();
@@ -21,21 +27,33 @@ const Layout = () => {
             navigate("/");
           }}
         />
-        {sidebar ? (
-          <X
+
+        <div className="flex items-center">
+          <div
+            className="w-[60px] h-[60px] cursor-pointer flex justify-center items-center rounded-md relative"
             onClick={() => {
-              setSidebar(false);
+              setShowCart(true);
             }}
-            className="w-6 h-6 text-gray-600 sm:hidden"
-          />
-        ) : (
-          <Menu
-            onClick={() => {
-              setSidebar(true);
-            }}
-            className="w-6 h-6 text-gray-600 sm:hidden"
-          />
-        )}
+          >
+            <span className='absolute top-1.5 right-4'>{items.cart.length}</span>
+            <HiOutlineShoppingBag className="w-[20px] h-[20px] text-orange-500" />
+          </div>
+          {sidebar ? (
+            <X
+              onClick={() => {
+                setSidebar(false);
+              }}
+              className="w-6 h-6 text-gray-600 sm:hidden"
+            />
+          ) : (
+            <Menu
+              onClick={() => {
+                setSidebar(true);
+              }}
+              className="w-6 h-6 text-gray-600 sm:hidden"
+            />
+          )}
+        </div>
       </nav>
 
       <div className="flex-1 w-full flex h-[calc(100vh-64px)]">

@@ -1,47 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Gem, Sparkles } from "lucide-react";
-import { Protect } from "@clerk/clerk-react";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
-import toast from "react-hot-toast";
+import AllCars from "./AllCars";
+import { dataContext } from "../context/UserContext";
+import { useSelector } from "react-redux";
+import RentCart from "../components/RentCart";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const Dashboard = () => {
+  let items = useSelector((state) => state.cart);
+  let { category, setCategory, input, showCart, setShowCart } = useContext(dataContext);
   const [creations, setCreations] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { getToken } = useAuth();
 
-  const getDashboardData = async () => {
-    try {
-      const { data } = await axios.get("/api/user/get-user-creations", {
-        headers: {
-          Authorization: `Bearer ${await getToken()}`,
-        },
-      });
-
-      if (data.success) {
-        setCreations(data.creations);
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getDashboardData();
-  }, []);
-
   return (
-    <div className="h-full overflow-y-scroll p-6">
-      <div className="flex justify-start gap-4 flex-wrap">
+    <div className="h-full overflow-y-scroll p-6 bg-slate-200">
+      <div className="w-full flex flex-wrap justify-start items-center">
         <div
-          className="flex justify-between items-center w-72 p-4 px-6 rounded-xl bg-white/30
+          className="flex justify-between items-center w-72 p-4 px-6 rounded-xl bg-white
            border border-white/40 ring-1 ring-gray-200/60
            shadow-2xl"
         >
@@ -54,6 +34,9 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      <AllCars />
+      <RentCart items={items} />
     </div>
   );
 };
