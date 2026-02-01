@@ -7,8 +7,12 @@ import { SignIn, useUser } from "@clerk/clerk-react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { dataContext } from "../context/UserContext";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const Layout = () => {
+  const location = useLocation();
+  const isNotRentedCarsPage = !(location.pathname.includes("rented-cars"));
+
   let items = useSelector(state => state);
   let {input, setInput, category, setCategory, showCart, setShowCart} = useContext(dataContext);
   
@@ -29,7 +33,7 @@ const Layout = () => {
         />
 
         <div className="flex items-center">
-          <div
+          {isNotRentedCarsPage && (<div
             className="w-[60px] h-[60px] cursor-pointer flex justify-center items-center rounded-md relative"
             onClick={() => {
               setShowCart(true);
@@ -37,7 +41,7 @@ const Layout = () => {
           >
             <span className='absolute top-1.5 right-4'>{items.cart.length}</span>
             <HiOutlineShoppingBag className="w-[20px] h-[20px] text-orange-500" />
-          </div>
+          </div>)}
           {sidebar ? (
             <X
               onClick={() => {
