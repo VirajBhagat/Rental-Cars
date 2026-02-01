@@ -13,14 +13,14 @@ const AllCars = () => {
             key={`Car-car-${idx}`}
             name={item.car_name}
             image={item.car_image}
-            price={item.price}
+            price_per_day={item.price_per_day}
             id={item.id}
             type={item.car_type}
           />
         ))
       ) : (
         <div className="mt-5">
-          <span className="text-4xl fw-semibold text-green-400">
+          <span className="text-4xl fw-semibold text-orange-400">
             No search found...
           </span>
         </div>

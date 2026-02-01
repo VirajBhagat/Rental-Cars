@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { AddItem } from "../redux/cartSlice";
 
-function Car({ name, image, id, price, type }) {
+function Car({ name, image, id, price_per_day, type }) {
   let items = useSelector((state) => state.cart);
   
   let dispatch = useDispatch();
@@ -16,7 +16,7 @@ function Car({ name, image, id, price, type }) {
         AddItem({
           id: id,
           name: name,
-          price: price,
+          price_per_day: price_per_day,
           img: image,
           qty: 1,
           days: 1,
@@ -40,7 +40,7 @@ function Car({ name, image, id, price, type }) {
 
         <div className="w-full flex justify-between items-center flex-wrap gap-2">
           <div className="text-base sm:text-lg font-bold text-orange-500">
-            Rs. {price}{" "}
+            Rs. {price_per_day}{" "}
             <span className="text-sm text-slate-500">{"(Per Day)"}</span>
           </div>
           <div className="flex justify-center items-center gap-2 text-sm sm:text-lg font-semibold text-orange-500">

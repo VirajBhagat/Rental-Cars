@@ -3,7 +3,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { RemoveItem, IncreaseDays, DecreaseDays, IncreasePersons, DecreasePersons } from "../redux/cartSlice";
 
-function CartCard({ id, name, price, img, qty, days, persons }) {
+function CartCard({ id, name, price_per_day, img, qty, days, persons }) {
   const dispatch = useDispatch();
 
   return (
@@ -66,7 +66,7 @@ function CartCard({ id, name, price, img, qty, days, persons }) {
 
       <div className="flex flex-row sm:flex-col justify-between sm:justify-start items-center sm:items-end gap-4">
         <span className="text-lg sm:text-xl text-orange-400 font-semibold">
-          Rs. {price}{" "}
+          Rs. {price_per_day}{" "}
           <span className="text-xs sm:text-sm text-slate-500">(Per Day)</span>
         </span>
 

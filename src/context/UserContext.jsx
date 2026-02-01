@@ -1,9 +1,8 @@
 import React, { createContext, useState } from "react";
-import { car_items } from "../server_manager/car";
 export const dataContext = createContext();
 
 function UserContext({ children }) {
-    let [category, setCategory] = useState(car_items);
+    let [category, setCategory] = useState([]);
     let [input, setInput] = useState("");
     let [showCart, setShowCart] = useState(false);
 

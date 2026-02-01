@@ -11,12 +11,36 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const Dashboard = () => {
   let items = useSelector((state) => state.cart);
-  
+
   let { category, setCategory, input, showCart, setShowCart } = useContext(dataContext);
   const [creations, setCreations] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { getToken } = useAuth();
+
+  const getDashboardData = async () => {
+    try {
+      const { data } = await axios.get("/api/user/get-cars", {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      });
+
+      if (data.success) {
+        setCategory(data.creations);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getDashboardData();
+  }, []);
 
   return (
     <div className="h-full overflow-y-scroll p-6 bg-slate-200">
@@ -27,8 +51,8 @@ const Dashboard = () => {
            shadow-2xl"
         >
           <div className="text-slate-600">
-            <p className="text-sm">Total Cars Available</p>
-            <h2 className="text-xl font-semibold">{creations.length}</h2>
+            <p className="text-sm">Total Package Available</p>
+            <h2 className="text-xl font-semibold">{category.length}</h2>
           </div>
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#dc6911] to-[#eeb737] text-white flex justify-center items-center">
             <Sparkles className="w-5 text-white" />

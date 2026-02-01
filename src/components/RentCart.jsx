@@ -2,15 +2,19 @@ import { useContext, useState } from "react";
 import { dataContext } from "../context/UserContext";
 import { GiCancel } from "react-icons/gi";
 import CartCard from "./CartCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RemoveAllOrder } from "../redux/cartSlice";
 import toast from "react-hot-toast";
 import emailjs from "emailjs-com";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import axios from "axios";
 
 const commonClass =
   "input input-lg border-0 border-b-2 focus:outline-none focus:placeholder:text-picto-primary placeholder:text-[15px] md:placeholder:text-lg focus:border-picto-primary border-[#E6E8EB] w-full rounded-none px-0";
 
 const RentCart = ({ items }) => {
+  const { user } = useUser();
+  const { getToken } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,15 +32,50 @@ const RentCart = ({ items }) => {
     useContext(dataContext);
 
   let subTotal = items.reduce(
-    (total, item) => total + item.qty * item.price,
+    (total, item) => total + item.qty * item.price_per_day,
     0,
   );
-  let deliveryFee = 20;
-  let taxes = Math.floor((subTotal * 0.5) / 100);
+  let deliveryFee = 500;
+  let taxes = Math.floor((subTotal * 0.5) / 100) + 100;
   let allTotal = Math.floor(subTotal + deliveryFee + taxes);
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
+
+    try {
+      const payload = {
+        clerk_user_id: user.id,
+        car_id: items[0].id,
+        user_name: formData.name,
+        user_email: formData.email,
+        user_phone: formData.number,
+        booking_date: formData.date,
+        message: formData.message,
+        days: items[0].days,
+        persons: items[0].persons,
+        price_per_day: items[0].price_per_day,
+        subtotal: subTotal,
+        delivery_fee: deliveryFee,
+        tax: taxes,
+        total_amount: allTotal,
+        status: 'BOOKED'
+      };
+
+      const { data } = await axios.post("/api/user/insert-car-rent", payload, {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (data.success) {
+        toast.success("Car booked successfully");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
 
     emailjs.send(
         import.meta.env.VITE_EMAIL_SERVICE_ID,
@@ -46,7 +85,7 @@ const RentCart = ({ items }) => {
       )
       .then(
         (result) => {
-          alert("Message sent successfully!");
+          toast.success("User notified successfully!");
           setFormData({
             name: "",
             email: "",
@@ -58,7 +97,7 @@ const RentCart = ({ items }) => {
         (error) => {
           alert("Failed to send message. Try again.");
         },
-      );
+    );
 
     dispatch(RemoveAllOrder());
     toast.success("Order place successfully.");
@@ -88,7 +127,7 @@ const RentCart = ({ items }) => {
                 key={`cartcard_${idx}`}
                 id={item.id}
                 name={item.name}
-                price={item.price}
+                price_per_day={item.price_per_day}
                 img={item.img}
                 qty={item.qty}
                 days={item.days}
@@ -97,7 +136,6 @@ const RentCart = ({ items }) => {
             ))}
           </div>
 
-          {/* Cart Price Section */}
           <div className="w-full mt-7 border-t-2 border-b-2 border-gray-400 flex flex-col gap-3 p-4">
             <div className="w-full flex justify-between items-center">
               <span className="font-semibold text-lg text-gray-600">
@@ -123,7 +161,6 @@ const RentCart = ({ items }) => {
             </div>
           </div>
 
-          {/* Grand Total */}
           <div className="w-full flex justify-between items-center p-4">
             <span className="font-semibold text-lg text-gray-600">Total</span>
             <span className="font-semibold text-lg text-orange-400">
@@ -132,7 +169,10 @@ const RentCart = ({ items }) => {
           </div>
 
           <div className="w-full mt-4 p-3 shadow-lg flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between border border-slate-300 rounded-lg">
-            <form onSubmit={sendEmail} className="w-full flex flex-col gap-7 mt-4">
+            <form
+              onSubmit={sendEmail}
+              className="w-full flex flex-col gap-7 mt-4"
+            >
               <input
                 name="name"
                 type="text"
