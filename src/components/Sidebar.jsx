@@ -1,5 +1,6 @@
 import { Protect, useClerk, useUser } from "@clerk/clerk-react";
 import {
+  Car,
   Eraser,
   FileText,
   Hash,
@@ -18,6 +19,11 @@ const navItems = [
     to: "/cars",
     label: "Dashboard",
     Icon: House,
+  },
+  {
+    to: "/cars/rented-cars",
+    label: "Rented Car",
+    Icon: Car,
   },
 ];
 

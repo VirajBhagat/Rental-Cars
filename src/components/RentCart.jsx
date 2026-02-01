@@ -68,7 +68,7 @@ const RentCart = ({ items }) => {
     <div
       className={`p-5 w-full md:w-[40vw] h-[100%] fixed top-0 right-0 bg-white shadow-xl ${
         showCart ? "translate-x-0" : "translate-x-full"
-      } transition-all duration-300 flex flex-col items-center overflow-auto`}
+      } transition-all duration-300 flex flex-col items-center overflow-auto z-50`}
     >
       <header className="w-[100%] flex justify-between items-center">
         <span className="text-orange-400 text-[18px] font-semibold">
@@ -91,6 +91,8 @@ const RentCart = ({ items }) => {
                 price={item.price}
                 img={item.img}
                 qty={item.qty}
+                days={item.days}
+                persons={item.persons}
               />
             ))}
           </div>

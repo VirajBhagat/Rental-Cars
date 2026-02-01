@@ -11,6 +11,7 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const Dashboard = () => {
   let items = useSelector((state) => state.cart);
+  
   let { category, setCategory, input, showCart, setShowCart } = useContext(dataContext);
   const [creations, setCreations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,7 @@ const Dashboard = () => {
            shadow-2xl"
         >
           <div className="text-slate-600">
-            <p className="text-sm">Total Cars Added</p>
+            <p className="text-sm">Total Cars Available</p>
             <h2 className="text-xl font-semibold">{creations.length}</h2>
           </div>
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#dc6911] to-[#eeb737] text-white flex justify-center items-center">

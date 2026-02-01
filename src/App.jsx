@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Layout from './pages/Layout';
 import Dashboard from './pages/Dashboard';
 import {Toaster} from 'react-hot-toast';
+import RentedCars from './pages/RentedCars';
 
 const App = () => {
 
@@ -14,6 +15,7 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/cars' element={<Layout />}>
           <Route index element={<Dashboard />} />
+          <Route path='rented-cars' element={<RentedCars />} />
         </Route>
       </Routes>
     </div>
