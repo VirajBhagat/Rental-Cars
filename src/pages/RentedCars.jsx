@@ -103,7 +103,7 @@ const RentedCars = () => {
           </div>
 
           <div className="grid gap-4 md:hidden">
-            {category.map((item, idx) => (
+            {bookings.map((item, idx) => (
               <div
                 key={`mobile-car-${idx}`}
                 className="border rounded-lg p-4 shadow-sm bg-white flex flex-col gap-3"
