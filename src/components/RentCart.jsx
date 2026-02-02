@@ -13,7 +13,6 @@ const commonClass =
   "input input-lg border-0 border-b-2 focus:outline-none focus:placeholder:text-picto-primary placeholder:text-[15px] md:placeholder:text-lg focus:border-picto-primary border-[#E6E8EB] w-full rounded-none px-0";
 
 const RentCart = ({ items }) => {
-  console.log(items);
   
   const { user } = useUser();
   const { getToken } = useAuth();
